@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
 
 //สร้างตาราง 7*6
 char *board[][7] = {
@@ -29,6 +30,15 @@ void play(int n,int turn, char *board[][7]){
             }
             
             break;
+        }
+    }
+}
+//ฟังคฺชั่นล้างตาราง
+void clearboard(char *board[][7]){
+    int i,j;
+    for (i = 1; i<=7;i++){
+        for(j = 0; j<=6;j++){
+            board[i][j] = " ";
         }
     }
 }
@@ -96,18 +106,39 @@ bool checkWin(char *board[][7]){
     return false;
 }
 
+void randomBlock(char *board[][7]){
+    int i,x,y;
+    
+    srand(time(NULL));
+    for (i = 0; i<3; i++){
+        
+        x = rand() %6 + 1;
+        y = rand() %6 + 1;
+        board[y][x] = "B";
+    }
+}
+
 //แสดงข้อความต้อนรับ
 void wellcome(){
     printf("     Wellcome to CONNECT 4\n\n");
     printf("         How to play\n");
-    printf("1. Insert number of collum 1-7 to put X or O\n");
-    printf("2. It will insert bottom to top\n");
-    printf("3. If X or O adjacent 4 is Winner!!!\n");
-    getch();
+    printf("1. Swap player to choose coin to put in colum (1-7)\n");
+    printf("2. Coin will put form bottom to top\n");
+    printf("3. Who can arrange 4 coin wil is winer\n\n");
+
+    //getch();
 }
 
 int main(){
+    char player1Name[50],player2Name[50];
     wellcome();     //เรียกใช้ฟังค์ชั่นแสดงข้อความต้อนรับ
+    printf("Insert Player 1 name\n>");
+    scanf("%s",player1Name);
+    printf("Insert Player 2 name\n>");
+    scanf("%s",player2Name);
+    printf("Wellcome %s and %s to Connect 4\n",player1Name,player2Name);
+    getch();
+    randomBlock(board);
     draw(board);    //เรียกใช้ฟังค์ชั่นวาดตารา
     int turn =1;    //ตั้งให้เป็นเทรินของผู้เล่นคนที่ 1
     while (true)    //ลูปมี่วนจนกว่าจะมีคนชนะ
@@ -127,14 +158,26 @@ int main(){
         bool check = checkWin(board);   //เช็คหาผู้ชนะ
         if (check == true){     //แสดงว่าใครเป็นผู้ชนะ
             if (turn == 1){
-                printf("X is Winner");
+                printf("%s is Winner",player1Name);                                  
             }
             else
             {
-                printf("O is Winner");
+                printf("%s is Winner",player2Name);                
             }
-            
-            break;  // เมื่อมีผู้ชนะจะสั่งหยุดการวนลูป
+            printf("Play agian? Enter [Y/N]\n");
+            char ch;
+            scanf(" %c",&ch);
+            if (ch == 'Y')
+            {
+                clearboard(board);
+                randomBlock(board);
+                draw(board);
+            }
+            else
+            {
+                break;
+            }
+            //break;  // เมื่อมีผู้ชนะจะสั่งหยุดการวนลูป
         }
         if(turn == 1){  //สลับเทรินของผู้เล่น
             turn = 2;
