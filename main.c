@@ -61,44 +61,44 @@ void draw(char *board[][7]){
 //เช็คเงื่อนไขการชนะ
 bool checkWin(char *board[][7]){
     int i;
-    for (i = 0; i <=6; i++){
+    for (i = 0; i < 7; i++){
         int j;
-        for (j=0;j<=6;j++){
+        for (j=0;j < 7;j++){
             //player 1
             //เช็คแนวตั้ง
-            if (board[i][j] == "X" && board[i][j+1] == "X" && board[i][j+2] == "X" && board[i][j+3] == "X"){
+            if (board[i][j] == "X" && board[i][j+1] == "X" && board[i][j+2] == "X" && board[i][j+3] == "X" && j<4){
                 return true;
             }
             //เช็คแนวนนอน
-            if (board[i][j] == "X" && board[i+1][j] == "X" && board[i+2][j] == "X" && board[i+3][j] == "X")
+            if (board[i][j] == "X" && board[i+1][j] == "X" && board[i+2][j] == "X" && board[i+3][j] == "X" && i<4)
             {
                 return true;
             }
             //เช็คแนวทแยงลงขวา
-            if (board[i][j] == "X" && board[i+1][j+1] == "X" && board[i+2][j+2] == "X" && board[i+3][j+3] == "X"){
+            if (board[i][j] == "X" && board[i+1][j+1] == "X" && board[i+2][j+2] == "X" && board[i+3][j+3] == "X" && i<4&&j<4){
                 return true;
             }
             //เช็คแนวทแยงลงซ้าย
-            if (board[i][j] == "X" && board[i+1][j-1] == "X" && board[i+2][j-2] == "X" && board[i+3][j-3] == "X"){
+            if (board[i][j] == "X" && board[i+1][j-1] == "X" && board[i+2][j-2] == "X" && board[i+3][j-3] == "X" && i<4&&j>3){
                 return true;
             }
             
             //player 2
             //เช็คแนวตั้ง
-            if (board[i][j] == "O" && board[i][j+1] == "O" && board[i][j+2] == "O" && board[i][j+3] == "O"){
+            if (board[i][j] == "O" && board[i][j+1] == "O" && board[i][j+2] == "O" && board[i][j+3] == "O" && j<4){
                 return true;
             }
             //เช็คแนวนอน
-            if (board[i][j] == "O" && board[i+1][j] == "O" && board[i+2][j] == "O" && board[i+3][j] == "O")
+            if (board[i][j] == "O" && board[i+1][j] == "O" && board[i+2][j] == "O" && board[i+3][j] == "O" && i<4)
             {
                 return true;
             }
             //เช็คแนวทแยงลงขวา
-            if (board[i][j] == "O" && board[i+1][j+1] == "O" && board[i+2][j+2] == "O" && board[i+3][j+3] == "O"){
+            if (board[i][j] == "O" && board[i+1][j+1] == "O" && board[i+2][j+2] == "O" && board[i+3][j+3] == "O" && i<4&&j<4){
                 return true;
             }
             //เช็คแนวทแยงลงซ้าย
-            if (board[i][j] == "O" && board[i+1][j-1] == "O" && board[i+2][j-2] == "O" && board[i+3][j-3] == "O"){
+            if (board[i][j] == "O" && board[i+1][j-1] == "O" && board[i+2][j-2] == "O" && board[i+3][j-3] == "O"&& i<4&&j>3){
                 return true;
             }
         }
@@ -106,11 +106,11 @@ bool checkWin(char *board[][7]){
     return false;
 }
 
-void randomBlock(char *board[][7]){
+void randomBlock(char *board[][7],int num){
     int i,x,y;
     
     srand(time(NULL));
-    for (i = 0; i<3; i++){
+    for (i = 0; i<num; i++){
         
         x = rand() %6 + 1;
         y = rand() %6 + 1;
@@ -131,14 +131,17 @@ void wellcome(){
 
 int main(){
     char player1Name[50],player2Name[50];
+    int numBlock;
     wellcome();     //เรียกใช้ฟังค์ชั่นแสดงข้อความต้อนรับ
     printf("Insert Player 1 name\n>");
     scanf("%s",player1Name);
     printf("Insert Player 2 name\n>");
     scanf("%s",player2Name);
+    printf("Intert number of Block 1 to 42\n>");
+    scanf("%d",&numBlock);
     printf("Wellcome %s and %s to Connect 4\n",player1Name,player2Name);
     getch();
-    randomBlock(board);
+    randomBlock(board,numBlock);
     draw(board);    //เรียกใช้ฟังค์ชั่นวาดตารา
     int turn =1;    //ตั้งให้เป็นเทรินของผู้เล่นคนที่ 1
     while (true)    //ลูปมี่วนจนกว่าจะมีคนชนะ
@@ -170,7 +173,7 @@ int main(){
             if (ch == 'Y')
             {
                 clearboard(board);
-                randomBlock(board);
+                randomBlock(board,numBlock);
                 draw(board);
             }
             else
